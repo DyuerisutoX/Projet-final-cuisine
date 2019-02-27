@@ -34,10 +34,11 @@ include('includes/bdd.php');
 if(isset($_POST['connection'])){
 
   $mailconnect = htmlspecialchars($_POST['mailconnect']);
-  $mdpconnect = sha1 ($_POST['mdpconnect']);
+  $mdpconnect = sha1($_POST['mdpconnect']);
 
   if(!empty($mailconnect) AND !empty($mdpconnect))
   {
+    //vérification de l'existence de l'utilisateur et des bons mail et mdpp
     $requser = $bdd -> prepare('SELECT * FROM utilisateurs where mail = ? AND mdp = ?');
     $requser -> execute(array($mailconnect, $mdpconnect));
     
@@ -61,7 +62,7 @@ if(isset($_POST['connection'])){
         if($_SESSION['id_role'] = '1'){
           header('location: profil.php?id='.$_SESSION['id']);
         }else{
-          
+          header('location: utilisateurs/index.php?id='.$_SESSION['id']);
         }
 
       }else {

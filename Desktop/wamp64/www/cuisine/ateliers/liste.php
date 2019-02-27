@@ -1,5 +1,15 @@
 <?php
-    $bdd = new PDO('mysql:host=localhost;dbname=cuisine;charset=utf8', 'root', '');
+    session_start();
+
+include('../includes/bdd.php');
+
+    if(isset($_GET['id']) AND $_GET['id'] > 0)
+    {
+        $getid = intval($_GET['id']);
+        $requser = $bdd->prepare('SELECT id FROM utilisateurs WHERE id = ?');
+        $requser->execute(array($getid));
+        $userinfo = $requser->fetch();
+
 ?>
 
 <!DOCTYPE html>
@@ -9,8 +19,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Liste Ateliers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css" />
 </head>
 <body>
 
@@ -31,7 +40,7 @@
 
             <!-- Connexion BDD, table ateliers -->
             
-            <?php $reponse = $bdd -> query('SELECT * FROM ateliers');
+            <?php $reponse = $bdd -> query('SELECT * FROM ateliers WHERE id_cuisinier = '.$getid.'');
             while ($donnees = $reponse -> fetch())
             {?>
 
@@ -46,6 +55,8 @@
                     <td><?php echo $donnees['places_dispo'];?></td>
                     <td><?php echo $donnees['places_reserver'];?></td>
                     <td><?php echo $donnees['prix'];?></td>
+                    <td><a href="edit_atelier.php?edit=<?php echo $donnees['id'] ?>">Editer</a></td>
+
                     
 
                 </tr>
@@ -58,3 +69,6 @@
        
 </body>
 </html>
+<?php 
+    } 
+?>

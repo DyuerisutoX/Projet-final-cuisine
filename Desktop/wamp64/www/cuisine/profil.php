@@ -3,9 +3,9 @@ session_start();
 
 include('includes/bdd.php');
 
-    if(isset($_GET['id']) AND $_GET['id'] > 0)
+    if(isset($_SESSION['id']) AND !empty($_SESSION['id']) )
     {
-        $getid = intval($_GET['id']);
+        $getid = intval($_SESSION['id']);
         $requser = $bdd->prepare('SELECT * FROM utilisateurs WHERE id = ?');
         $requser->execute(array($getid));
         $userinfo = $requser->fetch();
@@ -26,7 +26,8 @@ include('includes/bdd.php');
 
       <nav>
         <ul>
-          <li><a href="ateliers/ajout.php">Ajouter un atelier</a></li>
+          <li><a href="ateliers/profil.php?id='.$getid.'">Voir les ateliers</a></li>
+          <li><a href="ateliers/index.php">Ajouter un atelier</a></li>
         </ul>
       </nav>
        <div class="jumbotron"> 
@@ -56,5 +57,8 @@ include('includes/bdd.php');
 </html>
 
 <?php 
+    }else{
+        session_destroy();
+                    header('Location: login.php'); 
     }
 ?>

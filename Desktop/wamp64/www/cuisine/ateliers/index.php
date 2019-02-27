@@ -1,3 +1,15 @@
+<?php 
+session_start();
+
+include('../includes/bdd.php');
+
+    if(isset($_GET['id']) AND $_GET['id'] > 0)
+    {
+        $getid = intval($_GET['id']);
+        $requser = $bdd->prepare('SELECT * FROM utilisateurs WHERE id = ?');
+        $requser->execute(array($getid));
+        $userinfo = $requser->fetch();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,10 +18,49 @@
     <title>Ateliers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css" />
-    <script src="main.js"></script>
+
 </head>
 <body>
-<form action="ateliers.php" style="align:center" method="POST">
+    <?php
+    if(isset($_POST['form_ajout_ateliers']))
+    {
+        //stock mes valeurs des $_POST
+        $titres = htmlspecialchars($_POST['ajout_titres']);
+        $descriptif = htmlspecialchars($_POST['ajout_descriptif']);
+        $date = htmlspecialchars(date("Y-m-d", strtotime($_POST['ajout_date'])));
+       
+        $times = htmlspecialchars($_POST['ajout_times']); //null; 
+        $duree = htmlspecialchars($_POST['ajout_duree']); //null; 
+        $dispo = htmlspecialchars($_POST['ajout_dispo']);
+        $reserver = htmlspecialchars($_POST['ajout_reserver']);
+        $prix = htmlspecialchars($_POST['ajout_prix']);
+
+        $getid = intval($_GET['id']);
+        
+        //Vérifier existence et si non vide
+        
+        if (isset($titres) AND isset($descriptif) AND isset($date)
+            AND isset($times) AND isset($duree) AND isset($dispo) AND isset($reserver) AND isset($prix) AND isset($getid)
+            )                                    
+        {          
+            //prepare insert into pour envoyer des données dans la BDD
+            $ateliers = $bdd -> prepare('INSERT INTO ateliers (titre, descriptif, date_atelier, debut, duree, places_dispo, places_reserver, prix, id_cuisinier) VALUES (?,?,?,?,?,?,?,?, ?)');
+            $ateliers ->execute(array($titres, $descriptif, $date, $times, $duree, $dispo, $reserver, $prix, $getid));
+
+            $message ='donnees bien enregistrer!';  
+        }
+
+        else
+        {
+                     $message ='Saisi incorrect.';
+        }
+    }
+    else
+    {
+      $message = 'Tous les champs doivent être complétés.';
+    }
+    ?>
+<form action=" " style="align:center" method="POST">
         <!-- Titre -->
         <div class="form-group">
             <label for="ajout_titres">Titre : </label>
@@ -25,7 +76,7 @@
         <!-- Date -->
         <div class="form-group">
             <label for="ajout_date">Date : </label>
-            <input type="date" name="ajout_date" placeholder="date">
+            <input type="text" name="ajout_date" placeholder="date">
         </div>
 
         <!-- Horaire de début -->
@@ -73,3 +124,9 @@
 
 </body>
 </html>
+<?php 
+    }else{
+        session_destroy();
+        header('Location: ../login.php'); 
+    }  
+?>
