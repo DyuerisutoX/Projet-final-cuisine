@@ -2,11 +2,11 @@
 session_start();
 
 include('../includes/bdd.php');
-
-    if(isset($_GET['id']) AND $_GET['id'] > 0)
+ $getid = intval($_SESSION['id']);
+    if(isset($getid) AND !empty($getid) )
     {
-        $getid = intval($_GET['id']);
-        $requser = $bdd->prepare('SELECT * FROM utilisateurs WHERE id = ?');
+       
+        $requser = $bdd->prepare('SELECT id FROM utilisateurs WHERE id = ?');
         $requser->execute(array($getid));
         $userinfo = $requser->fetch();
 ?>
@@ -17,11 +17,21 @@ include('../includes/bdd.php');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Ateliers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/style.css">
 
 </head>
 <body>
-    <?php
+
+<nav class=" nav nav-dark " style="background-color: #d05c62 ;">
+    <ul class="nav">
+        <li class="navbar-brand"><img class="img-fluid" src="../img/logo.PNG" width="75px" height="75px" ></li>
+        <li class="nav-item"><a class="nav-link" href="../utilisateurs/profil.php">Profil</a></li>
+        <li class="nav-item"><a class=" nav-link" href="index.php">Ajouter un atelier</a></li>
+        <li class="nav-item"><a class=" nav-link" href="liste.php">Voir les ateliers</a></li>
+    </ul>       
+</nav>
+   <?php
     if(isset($_POST['form_ajout_ateliers']))
     {
         //stock mes valeurs des $_POST
@@ -35,7 +45,6 @@ include('../includes/bdd.php');
         $reserver = htmlspecialchars($_POST['ajout_reserver']);
         $prix = htmlspecialchars($_POST['ajout_prix']);
 
-        $getid = intval($_GET['id']);
         
         //Vérifier existence et si non vide
         
@@ -111,7 +120,7 @@ include('../includes/bdd.php');
             <input type="number" name="ajout_prix" placeholder="prix">
         </div>
 
-        <button type="submit" class="btn btn-primary mb-2" name="form_ajout_ateliers" value="ajouter un ateliers">ajouter</button>
+        <button type="submit" class="btn  mb-2 btn-o" name="form_ajout_ateliers" value="ajouter un ateliers">ajouter</button>
       
 	</form>
 

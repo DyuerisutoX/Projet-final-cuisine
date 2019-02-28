@@ -1,3 +1,47 @@
+<?php
+session_start();
+
+//on include BDD
+include('../includes/bdd.php');
+
+//vérification s'il y a une session 
+  if(isset($_SESSION['id']) AND !empty($_SESSION['id']) )
+    {
+    //$getid ne peut être un chiffre      
+    $getid = intval($_SESSION['id']);
+    
+    if(isset($_GET['edit']) AND !empty($_GET['id'])){
+
+      $getedit = intval($_GET['edit']); 
+
+      var_dump($getedit);
+      die();
+      //on sélectionne tous les ateliers créer par l'utilisateur 
+      $edit_ateliers = $bdd->prepare('SELECT * FROM ateliers WHERE id = ?');
+      $edit_ateliers->execute(array($getedit));
+
+      }
+        if( !empty($_POST['titre']) AND !empty($_POST['descriptif']) AND !empty($_POST['prix']) AND !empty($_POST['date_atelier']) AND !empty($_POST['duree']) AND !empty($_POST['places_dispo']) AND isset($_POST['places_reserver']) )
+      {
+        //tous les variables des données 
+        $titre = htmlspecialchars($_POST['titre']); 
+        $descriptif= htmlspecialchars($_POST['descriptif']);
+        $prix = intval($_POST['prix']);
+        $date_atelier = htmlspecialchars($_POST['date_atelier']);
+        $heure = htmlspecialchars($_POST['duree']); 
+        $dispo = intval($_POST['places_dispo']); 
+        $reserver = intval($_POST['places_reserver']);
+
+        //rêquete pour updater
+        $update = $bdd->prepare('UPDATE ateliers SET titre = ?, descriptif = ?, date_atelier = ?, debut = ?,  places_dispo = ?,  places_reserver = ?,  prix = ? ');
+        $update->execute(array($titre, $descriptif, $date_atelier, $heure, $dispo, $reserver, $prix));
+        header('location: liste.php');
+       
+      }
+    
+   
+   
+?>
 <!DOCTYPE html>
 
 <head>
@@ -6,50 +50,18 @@
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 </head>
-
-<?php
-
-include('../includes/bdd.php');
- $get_edit = intval($_GET['edit']);
-if(isset($_GET['edit']) AND !empty($_GET['edit'])){
-    
-   
-    $edit_ateliers = $bdd->prepare('SELECT * FROM ateliers WHERE id = ?');
-    $edit_ateliers->execute(array($get_edit));
-
-        if($edit_ateliers->rowCount()==1){
-            
-            $edit_ateliers = $edit_ateliers->fetch(); 
-        }
-        else
-        {
-            die('Cet atelier n\'existe pas');
-        }
-}
-
-$req=$bdd->query('SELECT * FROM ateliers WHERE id = '.$get_edit.'');
-$req->execute(array('titre', 'descriptif', 'date_atelier','places_dispo', 'prix', 'places_reserver','images' ));
-
-if( !empty($_POST['titre']) AND !empty($_POST['descriptif']) AND !empty($_POST['prix']) AND !empty($_POST['date_atelier']) AND !empty($_POST['duree']) AND !empty($_POST['places_dispo']) AND isset($_POST['places_reserver']) )
-{
-  //tous les variables des données 
-  $titre = htmlspecialchars($_POST['titre']); 
-  $descriptif= htmlspecialchars($_POST['descriptif']);
-  $prix = intval($_POST['prix']);
-  $date_atelier = htmlspecialchars($_POST['date_atelier']);
-  $heure = htmlspecialchars($_POST['duree']); 
-  $dispo = intval($_POST['places_dispo']); 
-  $reserver = intval($_POST['places_reserver']);
-
-  //rêquete pour updater
-  $update = $bdd->prepare('UPDATE ateliers SET titre = ?, descriptif = ?, date_atelier = ?, debut = ?,  places_dispo = ?,  places_reserver = ?,  prix = ? ');
-  $update->execute(array($titre, $descriptif, $date_atelier, $heure, $dispo, $reserver, $prix));
-  header('location: liste.php');
  
-}
 
-?>
+
 <body>
+  <nav class=" nav nav-dark " style="background-color: #d05c62 ;">
+    <ul class="nav">
+        <li class="navbar-brand"><img class="img-fluid" src="../img/logo.PNG" width="75px" height="75px" ></li>
+        <li class="nav-item"><a class="nav-link" href="../utilisateurs/profil.php">Profil</a></li>
+        <li class="nav-item"><a class=" nav-link" href="index.php">Ajouter un atelier</a></li>
+        <li class="nav-item"><a class=" nav-link" href="liste.php">Voir les ateliers</a></li>
+    </ul>       
+</nav>
   <!-- Navigation-->
   <div class="content-wrapper">
     <div class="container-fluid">
@@ -57,9 +69,7 @@ if( !empty($_POST['titre']) AND !empty($_POST['descriptif']) AND !empty($_POST['
         <div class="col-12">
         
           <h1>Edition d'atelier</h1>
-          <?php 
-           while($donnee = $req->fetch())
-           {
+          <?php while($donnee = $edit_ateliers->fetch()) :
           ?>
           <div class="form-group">
             <form id="form-edit" method="post" action="">
@@ -96,7 +106,7 @@ if( !empty($_POST['titre']) AND !empty($_POST['descriptif']) AND !empty($_POST['
             </form> 
           </div>
           <?php 
-          }
+          endwhile;
           ?>
         </div>
       </div>
@@ -109,4 +119,8 @@ if( !empty($_POST['titre']) AND !empty($_POST['descriptif']) AND !empty($_POST['
 
 </html>
 
-
+<?php }else{
+session_destroy();
+header('location: login.php');
+}
+  ?>

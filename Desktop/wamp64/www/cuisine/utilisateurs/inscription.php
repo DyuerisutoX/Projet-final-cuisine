@@ -1,12 +1,15 @@
-<?php include('includes/bdd.php');
+<?php 
+//inclus la connexion BDD
+include('includes/bdd.php');
 
 $roles =$bdd->query('SELECT *FROM roles'); ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>AVD-inscription</title>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 <div align = "center">
