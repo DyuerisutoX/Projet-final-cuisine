@@ -1,57 +1,98 @@
 <?php 
 //inclus la connexion BDD
-include('includes/bdd.php');
+include('../includes/bdd.php');
 
 $roles =$bdd->query('SELECT *FROM roles'); ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>AVD-inscription</title>
+    <meta charset="utf-8">
+	<title>Inscription</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
-<div align = "center">
-    <form id="form-inscription" action="" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
 
-            <h1>Formulaire d'inscription</h1>
-          
-             <!-- prénom -->
-            <div class="form-group">
-                    <label>Prénom *</label>            
-                    <input type="text" name="ajout_prenom">
-            </div>            
-                    <label>Nom *</label>            
-                    <input type="text" name="ajout_nom">
-                    
-                    <label>Mail *</label>
-            	    <input type="email" name="ajout_mail">
-                    
-                    <label>Mot de passe *</label>
-                    <input type="password" name="ajout_mdp">
+                 <div class="jumbotron">
 
-                    <label>Confirmation mot de passe *</label>
-                    <input type="password" name="ajout_mdp2">
+                    <form id="form-inscription" action="" method="post">
+                            <a class="btn btn-o" href="../index.php">Retour</a>
+                            <h1>Formulaire d'inscription</h1>
+                        
+                            <!-- prénom -->
+                            <div class=" row form-group ">
+                                <div class="col">
+                                     <label for="ajout_prenom">Prénom *</label>            
+                                    <input class="form-control" type="text" name="ajout_prenom">
+                                </div>
+                                   
+                             
+                            <!-- nom --> 
+                                <div class="col">
+                                    <label for="ajout_nomm">Nom *</label>            
+                                    <input class="form-control" type="text" name="ajout_nom">
+                                </div>         
+                                    
+                             </div>
 
-                    <label>Spécialités</label>
-                    <input type="text" name="ajout_specialite"  >
-            	    
-                    <label>Numéro de téléphone</label>
-                    <input type="tel" name="ajout_num"  >
+                             <!-- mail --> 
+                            <div class=" row form-group ">
+                                <div class="col">        
+                                    <label for="ajout_mail">Mail *</label>
+                                    <input type="email" class="form-control" name="ajout_mail">
+                                </div>
+                            <!--Role-->
+                                <div class="col">
+                                    <label for="ajout_role">Rôle</label>
+                                    
+                                    <select class="form-control" name="ajout_role">
+                                    <?php while($ajout_role = $roles->fetch() ): ?>
+                                    <option value="<?= $ajout_role['id'] ;?>"><?= $ajout_role['label']; ?></option>
+                                    <?php endwhile; ?>    
+                                    </select> 
+                                </div>
+                            </div>
 
-                    <label>Rôle</label>
-        	        <select name="ajout_role">
-                    <?php while($ajout_role = $roles->fetch() ): ?>
-                   <option value="<?= $ajout_role['id'] ;?>"><?= $ajout_role['label']; ?></option>
-                    <?php endwhile; ?>    
-                    </select>
-                       
-        	        <input type="submit" name ="form_inscription" value="S'inscrire" class="submit"/>
+                            <!-- mdp --> 
+                            <div class=" row form-group ">
+                                <div class="col">      
+                                    <label for="ajout_mdp">Mot de passe *</label>
+                                    <input type="password" class="form-control" name="ajout_mdp">
+                                </div>
+                            <!--MDP confirme-->
+                                <div class="col">
+                                    <label for="ajout_mdp2">Confirmation mot de passe *</label>
+                                    <input type="password" class="form-control" name="ajout_mdp2">
+                                </div>
+                            </div>
+                            <!--Spécialités-->
+                            <div class="row form-group">
+                                <div class="col">
+                                   <label for="ajout_specialite">Spécialités</label>
+                                    <input type="text" class="form-control" name="ajout_specialite"  > 
+                                </div>
+                                <!--tel-->
+                                <div class="col">
+                                    <label for="ajout_num">Numéro de téléphone</label>
+                                    <input type="tel" class="form-control" name="ajout_num"  >
+                                </div>
+                            </div>
+
+                            <input type="submit" class="btn btn-o" name ="form_inscription" value="S'inscrire" class="submit"/>
+                                
+                                <p>Tous les éléments ayant * sont obligatoires.</p>
+                    </form>
                    
-       <p>Tous les éléments ayant * sont obligatoires.</p>
-    </form>
-
+                </div><!-- FIN jumbotron--> 
+            </div> <!-- FIN col-->      
+        </div>
+       
+    </div>
 </body>
 </html>
 <?php

@@ -9,25 +9,30 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>AVD-connexion</title>
      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
   </head>
 
   <body class="text-center">
-
-    <form id="form-login" action ="" method="post">
-      
-        <h1 class="orange robot">Login</h1>
-          <label>Votre mail</label>
-          <input type="email"  name ="mailconnect"  placeholder="Email address"><br>
-          <label>Votre mot de passe</label>
-          <input type="password"  name="mdpconnect" placeholder="Password"><br>
-           
-      <button name ="connection" type="submit">Se connecter</button>
+    <main>
+        <div class="container">
+          <div class="jumbotron" >
+            <form class="form-group" id="form-login" action ="" method="post"> 
+                <h1 class="orange robot">Login</h1>
+                  <!--Mail -->
+                  <label for="mailconnect">Votre mail</label>
+                  <input type="email" class="form-control" name ="mailconnect"  placeholder="Email address"><br>
+                  <!--MDP-->
+                  <label for="mdpconnect">Votre mot de passe</label>
+                  <input type="password" class="form-control" name="mdpconnect" placeholder="Password"><br>
+                  
+              <button name ="connection" class="btn btn-o" type="submit">Se connecter</button>
+            </form>
+          </div>
+        </div>
+    </main>
     
- 
-    </form>
  </body>
 </html>
 <?php 
@@ -48,7 +53,7 @@ if(isset($_POST['connection'])){
 
     $role = $bdd->prepare('SELECT * FROM utilisateurs_roles '); 
     $role->execute();
-
+    //si l'utilisateur existe on crée la session
       if($userexist == 1)
       {
 
@@ -61,10 +66,10 @@ if(isset($_POST['connection'])){
         $_SESSION['id_role'] = $role_verif['id_role'];
   
       
-        if($_SESSION['id_role'] == 1){
+        if($_SESSION['id_role'] = '1'){
           header('location: profil.php?id='.$_SESSION['id']);
         }
-        if($_SESSION['id_role'] == 2){
+        if($_SESSION['id_role'] = '2'){
           header('location: index.php?id='.$_SESSION['id']);
         }
 
