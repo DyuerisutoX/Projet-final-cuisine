@@ -1,0 +1,24 @@
+.orange{
+	color: #f3671f;
+}
+
+.btn-o
+{
+	color :white;
+	background-color: #f3671f!important;
+	border-color: #f3671f!important;
+}
+
+body{
+
+font-family: Verdana;
+
+}
+
+.robot{
+	font-family: Roboto;
+}
+
+.rouge{
+	color : #d05c62;
+}
